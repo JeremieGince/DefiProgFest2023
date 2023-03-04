@@ -1,0 +1,38 @@
+{
+  "Echelon 0": {
+    "id": "LunarLander-v2",
+    "continuous": true,
+    "render_mode": null,
+    "gravity": -10.0,
+    "enable_wind": false,
+    "wind_power": 0.0,
+    "turbulence_power": 0.0
+  },
+  "Echelon 1": {
+    "id": "LunarLander-v2",
+    "continuous": true,
+    "render_mode": null,
+    "gravity": -10.0,
+    "enable_wind": true,
+    "wind_power": 5.0,
+    "turbulence_power": 0.0
+  },
+  "Echelon 2": {
+    "id": "LunarLander-v2",
+    "continuous": true,
+    "render_mode": null,
+    "gravity": -10.0,
+    "enable_wind": true,
+    "wind_power": 5.0,
+    "turbulence_power": 0.5
+  },
+  "Echelon 3": {
+    "id": "LunarLander-v2",
+    "continuous": false,
+    "render_mode": null,
+    "gravity": -10.0,
+    "enable_wind": true,
+    "wind_power": 5.0,
+    "turbulence_power": 0.5
+  }
+}

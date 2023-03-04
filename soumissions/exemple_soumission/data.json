@@ -1,0 +1,4 @@
+{
+  "discrete_random_gen": "randint",
+  "continuous_random_gen": "uniform"
+}
