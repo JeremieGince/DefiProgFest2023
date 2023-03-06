@@ -70,6 +70,13 @@ Cette erreur est soulevée puisque gym[box2d] nécessite C++ pour bien fonctionn
 - Attendre l'installation complète de C++ (prévoir 5-10 minutes de téléchargement sur le réseau de l'université)
 - Maintenant, vous devriez être en mesure d'effectuer <code> pip install gym[box2d]</code>
 
+## Bug: erreur lors de l'installation à cause de swig
+Si lors de l'installation python mentionne qu'il manque `swig.exe`, essayer d'exécuter les commandes suivantes:
+- ``pip install swig``
+- ``pip install pygame``
+- ``pip install box2d gym``
+
+
 Merci de nous contacter si vous avez des questions!
 
 ## À faire
