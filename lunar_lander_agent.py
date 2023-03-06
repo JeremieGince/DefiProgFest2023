@@ -33,16 +33,19 @@ class LunarLanderAgent:
 		self.observation_prev = np.zeros(8)
 
 	def PID(self, observation, observation_prev, mode):
-		Kcy = 1
+		Kcy = 2
 		Tiy = 1
 		Tdy = 1
-		Kcx = -10
+		Kcx = -5
 		Tix = 1
 		Tdx = 1
 
-		Vyset = -10
+		Vyset = 0.6
 		deltat = 0.021
-		threshold_erreur = 0.05
+		threshold_erreur = 0.005
+
+		Pos_x = observation[0]
+		Pos_y = observation[1]
 
 		Vx = observation[2]
 		Vy = observation[3]
@@ -56,10 +59,10 @@ class LunarLanderAgent:
 			pass  # gagné
 
 		else:
-			Cvy_vitesse = Kcy * (Vy - Vyset) + (Vy - Vyset) / Tiy + Tdy * (Vy - Vyprev) / deltat
-			Cvx = -(Kcx * Vx + Vx / Tix + Tdx * (Vx - Vxprev) / deltat)
+			Cvy_vitesse = (Kcy * (Vy - Vyset) + (Pos_y+1.42) / Tiy + Tdy * (Vy - Vyprev) / deltat)
+			Cvx = (Kcx * Vx + Pos_x / Tix + Tdx * (Vx - Vxprev) / deltat)
 
-			Cvy_angle = -(Kcy * angle + angle / Tiy + Tdy * (angle - angle_prev) / deltat)
+			Cvy_angle = (Kcy * angle + angle / Tiy + Tdy * (angle - angle_prev) / deltat)
 
 			Cvy = (Cvy_vitesse + Cvy_angle) / 2
 
@@ -114,9 +117,8 @@ class LunarLanderAgent:
 		action = env.action_space.sample()
 		if observation != []:
 			print(observation)
-			action = self.PID(observation, self.observation_prev, mode="discrete")
+			action = self.PID(observation, self.observation_prev, mode="continuous")
 			self.observation_prev = observation
-			action = 1
 		env.close()
 		return action
 		
@@ -152,7 +154,7 @@ if __name__ == '__main__':
 
 	time0 = time.time_ns()
 	configs = json.load(open(f"./env_configs.json", "r"))
-	echelon_id: int = 3
+	echelon_id: int = 2
 	echelon_key = [key for key in configs.keys() if key.startswith(f"Echelon {echelon_id}")][0]
 	agent = LunarLanderAgent(configs[echelon_key])
 	agent.get_action([])
