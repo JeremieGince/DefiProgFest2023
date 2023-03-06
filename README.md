@@ -8,6 +8,7 @@
     collaborer avec vos coéquipiers.
 - [GitHub](https://github.com/JeremieGince/DefiProgFest2023) du défi.
 - [Exemple d'utilisation de l'environnement](https://github.com/JeremieGince/DefiProgFest2023/blob/main/Gym-Tutorial.ipynb).
+- Pour des questions ou si vous trouvez un bug, vous pouvez faire un [github issue](https://github.com/JeremieGince/DefiProgFest2023/issues).
 
 ### Prix à gagner: Arduinos et Raspberry PI
 
