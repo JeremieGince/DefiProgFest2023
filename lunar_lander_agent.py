@@ -6,6 +6,8 @@ import numpy as np
 
 from tools.env_config_formatter import convert_str_attr_to_float_env_config
 
+import time
+
 
 class LunarLanderAgent:
 	"""
@@ -27,6 +29,53 @@ class LunarLanderAgent:
 		self.env_config = env_config
 		self.set_default_env_config()
 		self.observation_as_rgb = self.env_config.get("render_mode", None) == "rgb_array"
+		# self.time0 = time.time()
+		self.observation_prev = np.zeros(8)
+
+	def PID(self, observation, observation_prev, mode):
+		Kcy = 1
+		Tiy = 1
+		Tdy = 1
+		Kcx = -10
+		Tix = 1
+		Tdx = 1
+
+		Vyset = -10
+		deltat = 0.021
+		threshold_erreur = 0.05
+
+		Vx = observation[2]
+		Vy = observation[3]
+		angle = observation[4]
+
+		Vxprev = observation_prev[2]
+		Vyprev = observation_prev[3]
+		angle_prev = observation_prev[4]
+
+		if observation[-1] == "True" and observation[-2] == "True":
+			pass  # gagné
+
+		else:
+			Cvy_vitesse = Kcy * (Vy - Vyset) + (Vy - Vyset) / Tiy + Tdy * (Vy - Vyprev) / deltat
+			Cvx = -(Kcx * Vx + Vx / Tix + Tdx * (Vx - Vxprev) / deltat)
+
+			Cvy_angle = -(Kcy * angle + angle / Tiy + Tdy * (angle - angle_prev) / deltat)
+
+			Cvy = (Cvy_vitesse + Cvy_angle) / 2
+
+		if mode == "continuous":
+			Action_Space = [np.clip(Cvx, 0, 1), np.clip(Cvy, -1, 1)]
+		else:
+			if abs(Vy - Vyset) <= threshold_erreur and abs(Vx) <= threshold_erreur:
+				Action_Space = 0
+			elif abs(Vy - Vyset) > abs(Vx) and Vy - Vyset < 0:
+				Action_Space = 1
+			elif abs(Vy - Vyset) > abs(Vx) and Vy - Vyset > 0:
+				Action_Space = 3
+			else:
+				Action_Space = 2
+
+		return Action_Space
 	
 	def set_default_env_config(self):
 		self.env_config.setdefault('render_mode', None)
@@ -58,8 +107,16 @@ class LunarLanderAgent:
 		:return: Action à effectuer dans l'environnement.
 		:rtype: Union[int, np.ndarray]
 		"""
+		# time1 = time.time()
+		# print(time1-self.time0)
+		# self.time0 = time1
 		env = self.make_env()
 		action = env.action_space.sample()
+		if observation != []:
+			print(observation)
+			action = self.PID(observation, self.observation_prev, mode="discrete")
+			self.observation_prev = observation
+			action = 1
 		env.close()
 		return action
 		
@@ -91,11 +148,14 @@ class LunarLanderAgent:
 
 if __name__ == '__main__':
 	import json
-	
+	import time
+
+	time0 = time.time_ns()
 	configs = json.load(open(f"./env_configs.json", "r"))
-	echelon_id: int = 4
+	echelon_id: int = 3
 	echelon_key = [key for key in configs.keys() if key.startswith(f"Echelon {echelon_id}")][0]
 	agent = LunarLanderAgent(configs[echelon_key])
+	agent.get_action([])
 	cr = agent.visualise_trajectory()
 	print(f"Cumulative reward: {cr:.2f}")
 
