@@ -1,5 +1,9 @@
 # DefiProgFest2023
 
+![Lunar Lander gif](https://www.gymlibrary.dev/_images/lunar_lander.gif)
+
+### Prix à gagner: Arduinos et Raspberry PI
+
 Dans l'objectif de mettre en pratique les connaissances acquises lors du ProgFest 2023, nous vous proposons 
 d'effectuer un projet pouvant être réalisé en équipe. Nous recommandons des équipes de 2 à 4 personnes. Le projet 
 consiste à résoudre
@@ -158,6 +162,13 @@ mettre un fichier `requirements.txt` dans votre dossier afin que nous puissions 
 code. Afin de générer ce fichier facilement, vous pouvez utiliser la librairie [pipreqs](https://pypi.org/project/pipreqs/).
 Vous pouvez vous fier au format de [exemple_soumission](soumissions/exemple_soumission) pour vous aider à comprendre
 comment organiser votre soumission.
+
+### Date limite
+- La soumission doit être faite avant mardi le 7 à 14h.
+
+### Prix à gagner
+- Arduino
+- Raspberry PI
 
 ### Soumission via GitHub
 Vous devrez faire un "[fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo)" du 
