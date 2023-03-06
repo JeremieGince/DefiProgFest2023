@@ -55,6 +55,21 @@ de s'assurer de la généralisation de votre programme (et obtenir un maximum de
 ## Installer python 3.9
 Pour ce défi on recommande fortement d'utiliser python 3.9 qui est disponible [ici](https://www.python.org/downloads/release/python-3913/). On recommande cette version puisque les tests finaux seront fait avec cette distribution. Pour vous aider avec l'installer de python et la création d'un nouveau projet, vous pouvez vous référer à ce [guide](https://github.com/JeremieGince/TutorielPython-Manuel/blob/master/Environments/Environnements.pdf).
 
+## Corriger le bug : gym[box2d] ne s'installe pas.
+
+Après avoir téléchargé le repo, il est possible que le package gym[box2d] ne s'installe pas. L'erreur suivante est soulevée :
+
+<code>error: Microsoft Visual C++ 14.0 or greater is required. Get it with "Microsoft C++ Build Tools": https://visualstudio.microsoft.com/visual-cpp-build-tools/</code>
+
+Cette erreur est soulevée puisque gym[box2d] nécessite C++ pour bien fonctionner. Vous aurez donc cette erreur si vous n'avez pas C++ sur votre ordinateur. Voici les étapes à suivre pour corriger ce bug:
+
+- Aller sur le lien https://visualstudio.microsoft.com/visual-cpp-build-tools
+- Cliquer sur **Télécharger Build Tools**
+- Ouvrir visual studio (que vous venez de télécharger) et séléctionner **C++ Tool Box**
+- Attendre l'installation complète de C++ (prévoir 5-10 minutes de téléchargement sur le réseau de l'université)
+- Maintenant, vous devriez être en mesure d'effectuer <code> pip install gym[box2d]</code>
+
+Merci de nous contacter si vous avez des questions!
 
 ## À faire
 Vous avez à implémenter votre propre agent dans la classe `LunarLanderAgent` du fichier 
