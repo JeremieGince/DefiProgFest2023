@@ -2,6 +2,13 @@
 
 ![Lunar Lander gif](https://www.gymlibrary.dev/_images/lunar_lander.gif)
 
+## Ressources
+- L'environnement [LunarLander-v2](https://www.gymlibrary.dev/environments/box2d/lunar_lander/).
+- [Discord server](https://discord.gg/F8kcefP3my) où vous pouvez poser vos questions et/ou
+    collaborer avec vos coéquipiers.
+- [GitHub](https://github.com/JeremieGince/DefiProgFest2023) du défi.
+- [Exemple d'utilisation de l'environnement](https://github.com/JeremieGince/DefiProgFest2023/blob/main/Gym-Tutorial.ipynb).
+
 ### Prix à gagner: Arduinos et Raspberry PI
 
 Dans l'objectif de mettre en pratique les connaissances acquises lors du ProgFest 2023, nous vous proposons 
@@ -181,10 +188,3 @@ avec votre dossier contenant les fichiers demandés dans le dossier `soumissions
 modifier ou copier le code d'une autre équipe. Sachez que nous avons des moyens de détecter si vous avez copié
 ou modifié le code d'une autre équipe. Si vous êtes pris en flagrant délit, vous serez disqualifié.
 
-
-## Ressources
-- L'environnement [LunarLander-v2](https://www.gymlibrary.dev/environments/box2d/lunar_lander/).
-- [Discord server](https://discord.gg/F8kcefP3my) où vous pouvez poser vos questions et/ou
-    collaborer avec vos coéquipiers.
-- [GitHub](https://github.com/JeremieGince/DefiProgFest2023) du défi.
-- [Exemple d'utilisation de l'environnement](https://github.com/JeremieGince/DefiProgFest2023/blob/main/Gym-Tutorial.ipynb).
