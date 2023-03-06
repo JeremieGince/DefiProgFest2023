@@ -52,6 +52,9 @@ de s'assurer de la généralisation de votre programme (et obtenir un maximum de
 | MacOS | `pip install gym\[box2d\]` |
 | Linux | `pip install gym\[box2d\]` |
 
+## Installer python 3.9
+Pour ce défi on recommande fortement d'utiliser python 3.9 qui est disponible [ici](https://www.python.org/downloads/release/python-3913/). On recommande cette version puisque les tests finaux seront fait avec cette distribution. Pour vous aider avec l'installer de python et la création d'un nouveau projet, vous pouvez vous référer à ce [guide](https://github.com/JeremieGince/TutorielPython-Manuel/blob/master/Environments/Environnements.pdf).
+
 
 ## À faire
 Vous avez à implémenter votre propre agent dans la classe `LunarLanderAgent` du fichier 
