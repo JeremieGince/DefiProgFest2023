@@ -9,7 +9,7 @@ d'effectuer un projet pouvant être réalisé en équipe. Nous recommandons des 
 consiste à résoudre
 un problème à plusieurs échelles de difficultés, tout en collaborant avec vos coéquipiers et en utilisant de 
 bonnes pratiques de programmation. Le défi sera de faire atterrir un Lunar Lander à l'aide d'un
-programme Python. Le simulateur de l'engin spatial que vous utiliserez sera le populaire LunarLander-v2 de Gym.
+programme Python. Le simulateur de l'engin spatial que vous utiliserez sera le populaire [LunarLander-v2](https://www.gymlibrary.dev/environments/box2d/lunar_lander/) de Gym.
 
 Si vous ne connaissez pas déjà Gym, vous pouvez vous familiariser avec l'environnement avec 
 l'[exemple d'utilisation de l'environnement](https://github.com/JeremieGince/DefiProgFest2023/blob/main/Gym-Tutorial.ipynb).
@@ -116,26 +116,26 @@ Pour chaque échelon le "Cumulative Rewards" se doit d'être égal ou supérieur
 comme réussi. Les échelons sont classés par ordre croissant de difficulté.
 
 - Échelon 0:
-    * Action Space: Discrete
+    * Action Space: Continuous
     * Observation Space: Box
     * gravity: -10.0
     * enable_wind: False
 - Échelon 1:
-    * Action Space: Discrete
+    * Action Space: Continuous
     * Observation Space: Box
     * gravity: -10.0
     * enable_wind: True
     * wind_power: 5.0
     * turbulence_power: 0.0
 - Échelon 2:
-    * Action Space: Discrete
+    * Action Space: Continuous
     * Observation Space: Box
     * gravity: -10.0
     * enable_wind: True
     * wind_power: 5.0
     * turbulence_power: 0.5
 - Échelon 3:
-    * Action Space: Continuous
+    * Action Space: Discrete
     * Observation Space: Box
     * gravity: -10.0
     * enable_wind: True
