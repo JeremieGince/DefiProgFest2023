@@ -4,6 +4,8 @@ from typing import Union
 import gym
 import numpy as np
 
+from tools.env_config_formatter import convert_str_attr_to_float_env_config
+
 
 class LunarLanderAgent:
 	"""
@@ -43,6 +45,7 @@ class LunarLanderAgent:
 		"""
 		if env_config is None:
 			env_config = self.env_config
+		env_config = convert_str_attr_to_float_env_config(env_config)
 		env = gym.make(**env_config)
 		return env
 	
@@ -89,7 +92,10 @@ class LunarLanderAgent:
 if __name__ == '__main__':
 	import json
 	
-	echelon_id: int = 0
-	agent = LunarLanderAgent(json.load(open(f"./env_configs.json", "r"))[f"Echelon {echelon_id}"])
-	agent.visualise_trajectory()
+	configs = json.load(open(f"./env_configs.json", "r"))
+	echelon_id: int = 4
+	echelon_key = [key for key in configs.keys() if key.startswith(f"Echelon {echelon_id}")][0]
+	agent = LunarLanderAgent(configs[echelon_key])
+	cr = agent.visualise_trajectory()
+	print(f"Cumulative reward: {cr:.2f}")
 

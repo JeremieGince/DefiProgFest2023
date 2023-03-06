@@ -3,10 +3,13 @@ from typing import Union
 
 import gym
 import numpy as np
+
 try:
 	from .tools import get_random_generators, get_random_discrete_action, get_random_continuous_action
+	from .env_config_formatter import convert_str_attr_to_float_env_config
 except ImportError:
 	from tools import get_random_generators, get_random_discrete_action, get_random_continuous_action
+	from env_config_formatter import convert_str_attr_to_float_env_config
 
 
 class LunarLanderAgent:
@@ -54,6 +57,7 @@ class LunarLanderAgent:
 		"""
 		if env_config is None:
 			env_config = self.env_config
+		env_config = convert_str_attr_to_float_env_config(env_config)
 		env = gym.make(**env_config)
 		return env
 	
@@ -98,9 +102,11 @@ class LunarLanderAgent:
 if __name__ == '__main__':
 	import json
 	
-	echelon_id: int = 3
-	agent = LunarLanderAgent(json.load(open(f"./env_configs.json", "r"))[f"Echelon {echelon_id}"])
+	configs = json.load(open(f"./env_configs.json", "r"))
+	echelon_id: int = 4
+	echelon_key = [key for key in configs.keys() if key.startswith(f"Echelon {echelon_id}")][0]
+	agent = LunarLanderAgent(configs[echelon_key])
 	cr = agent.visualise_trajectory()
-	print(f"CR: {cr:.2f}")
+	print(f"Cumulative reward: {cr:.2f}")
 	
 	

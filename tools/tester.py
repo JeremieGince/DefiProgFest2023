@@ -1,8 +1,11 @@
+from copy import deepcopy
 from typing import List, Optional
 
 import gym
 import numpy as np
 import tqdm
+
+from tools.env_config_formatter import set_default_env_config, convert_str_attr_to_float_env_config
 
 
 class TestResult:
@@ -35,7 +38,8 @@ class LunarLanderPerformanceTest(LunarLanderTest):
 	):
 		self.name = name
 		self.agent = agent
-		self.env_config = env_config
+		self._given_config = deepcopy(env_config)
+		self.env_config = deepcopy(env_config)
 		self.set_default_env_config()
 		self.observation_as_rgb = self.env_config.get("render_mode", None) == "rgb_array"
 		self.num_episodes = num_episodes
@@ -43,9 +47,9 @@ class LunarLanderPerformanceTest(LunarLanderTest):
 		self.cumulative_rewards_list = []
 	
 	def set_default_env_config(self):
-		self.env_config.setdefault('render_mode', None)
-		self.env_config.setdefault('id', "LunarLander-v2")
-		
+		self.env_config = set_default_env_config(self.env_config)
+		self.env_config = convert_str_attr_to_float_env_config(self.env_config)
+	
 	def compute_score(self):
 		mean_cr = np.mean(self.cumulative_rewards_list).item()
 		score = np.clip(mean_cr / self.solved_reward, 0.0, 1.0) * 100.0
@@ -67,18 +71,20 @@ class LunarLanderPerformanceTest(LunarLanderTest):
 		return cumulative_rewards
 	
 	def run(self, verbose: bool = True):
-		env = gym.make(**self.env_config)
 		p_bar = tqdm.tqdm(range(self.num_episodes), desc=f"Running {self.name}", disable=not verbose)
 		for i in p_bar:
 			try:
+				env_config = convert_str_attr_to_float_env_config(self._given_config)
+				env = gym.make(**env_config)
 				cumulative_rewards = self.run_episode(env, seed=i)
+				env.close()
 			except Exception as e:
 				return TestResult(self.name, 0.0, message=f"Error raised during test: {e}")
 			self.cumulative_rewards_list.append(cumulative_rewards)
 			curr_score = self.compute_score()
 			curr_result = TestResult(self.name, curr_score)
 			p_bar.set_postfix_str(f"{curr_result}")
-		env.close()
+		
 		score = self.compute_score()
 		result = TestResult(self.name, score)
 		p_bar.set_postfix_str(f"{result}")

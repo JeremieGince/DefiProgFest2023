@@ -4,17 +4,28 @@ import sys
 import warnings
 	
 
-def exec_code_in_venv(cmd: str, cwd: str = ".", venv_name: str = "venv", **kwargs):
+def exec_code_in_venv(
+		cmd: str,
+		root_folder: str,
+		cwd: str = ".",
+		venv_name: str = "venv",
+		**kwargs
+):
 	VENV_ACTIVATE_CMD_BY_OS = {
-		"win32" : r"{}\Scripts\activate.bat",
-		"linux" : "source {}/bin/activate",
+		"win32": r"{}\Scripts\activate.bat",
+		"linux": "source {}/bin/activate",
 		"darwin": "source {}/bin/activate",
 	}
-	pip_install_cmd = "pip install -r requirements.txt"
+	requirements_path = os.path.join(root_folder, "requirements.txt")
+	if os.path.exists(requirements_path):
+		pip_install_cmd = f"pip install -r " + requirements_path
+	else:
+		pip_install_cmd = ""
 	activate_cmd = VENV_ACTIVATE_CMD_BY_OS[sys.platform].format(venv_name)
 	cmd = f"{activate_cmd} && {pip_install_cmd} && {cmd}"
-	if not os.path.exists(f"{cwd}/{venv_name}"):
-		cmd = f"python -m venv {venv_name} && {cmd}"
+	venv_path = os.path.join(root_folder, venv_name)
+	if not os.path.exists(venv_path):
+		cmd = f"python -m venv {venv_path} && {cmd}"
 	process = subprocess.Popen(
 		cmd,
 		stdin=subprocess.PIPE,
@@ -33,6 +44,7 @@ def exec_code_in_venv(cmd: str, cwd: str = ".", venv_name: str = "venv", **kwarg
 def main(root_folder: str):
 	stdout, stderr = exec_code_in_venv(
 		cmd=f"python run_tests.py {root_folder}",
+		root_folder=root_folder,
 		cwd="."
 	)
 	print(f"Stdout: {stdout}")

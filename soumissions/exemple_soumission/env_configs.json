@@ -34,5 +34,14 @@
     "enable_wind": true,
     "wind_power": 5.0,
     "turbulence_power": 0.5
+  },
+  "Echelon 4 ( Essaie don ca tony ;) )": {
+    "id": "LunarLander-v2",
+    "continuous": false,
+    "render_mode": null,
+    "gravity": -10.0,
+    "enable_wind": true,
+    "wind_power": "rand",
+    "turbulence_power": "rand"
   }
 }

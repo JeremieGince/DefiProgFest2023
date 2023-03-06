@@ -137,6 +137,13 @@ comme réussi. Les échelons sont classés par ordre croissant de difficulté.
     * enable_wind: True
     * wind_power: 5.0
     * turbulence_power: 0.5
+- Échelon 4 (échelon spécial pour M. Drouin qui semblait trouver le défi trop facile):
+    * Action Space: Discrete
+    * Observation Space: Box
+    * gravity: -10.0
+    * enable_wind: True
+    * wind_power: float aléatoire entre 0.0 et 20.0
+    * turbulence_power: float aléatoire entre 0.0 et 2.0
 
 
 
