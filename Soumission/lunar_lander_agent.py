@@ -1,9 +1,9 @@
 from copy import deepcopy
 from typing import Union
-
+from DQLearning import Agent
 import gym
 import numpy as np
-
+import torch
 from tools.env_config_formatter import convert_str_attr_to_float_env_config
 
 
@@ -17,6 +17,7 @@ class LunarLanderAgent:
 			d'images.
 	"""
 	def __init__(self, env_config: dict, **kwargs):
+		
 		"""
 		Constructor de la classe LunarLanderAgent.
 		
@@ -24,6 +25,14 @@ class LunarLanderAgent:
 		:type env_config: dict
 		:param kwargs: Arguments optionnels.
 		"""
+		if env_config["continuous"] == False:
+			self.Agent = Agent(gamma=0.99, epsilon=0, batch_size=64, n_actions=4, eps_end=0, input_dims=[8,], lr=0)
+			if env_config["enable_wind"]==True:
+				self.Agent.Q_eval.load_state_dict(torch.load("Soumission\discrete_unstable.pt"))
+			else:
+				self.Agent.Q_eval.load_state_dict(torch.load("discrete_stable.pt"))
+		else: 
+			print("Pas eu le temps pour le continue")
 		self.env_config = env_config
 		self.set_default_env_config()
 		self.observation_as_rgb = self.env_config.get("render_mode", None) == "rgb_array"
@@ -59,7 +68,7 @@ class LunarLanderAgent:
 		:rtype: Union[int, np.ndarray]
 		"""
 		env = self.make_env()
-		action = env.action_space.sample()
+		action = self.Agent.choose_action(observation=observation)
 		env.close()
 		return action
 		
@@ -92,9 +101,11 @@ class LunarLanderAgent:
 if __name__ == '__main__':
 	import json
 	
+	
 	configs = json.load(open(f"./env_configs.json", "r"))
 	echelon_id: int = 4
 	echelon_key = [key for key in configs.keys() if key.startswith(f"Echelon {echelon_id}")][0]
+	print(configs[echelon_key])
 	agent = LunarLanderAgent(configs[echelon_key])
 	cr = agent.visualise_trajectory()
 	print(f"Cumulative reward: {cr:.2f}")

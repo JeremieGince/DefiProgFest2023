@@ -103,7 +103,7 @@ if __name__ == '__main__':
 	import json
 	
 	configs = json.load(open(f"./env_configs.json", "r"))
-	echelon_id: int = 4
+	echelon_id: int = 3
 	echelon_key = [key for key in configs.keys() if key.startswith(f"Echelon {echelon_id}")][0]
 	agent = LunarLanderAgent(configs[echelon_key])
 	cr = agent.visualise_trajectory()
