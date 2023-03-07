@@ -3,7 +3,7 @@ from typing import Union
 
 import gym
 import numpy as np
-
+import simple_pid
 from tools.env_config_formatter import convert_str_attr_to_float_env_config
 
 
@@ -61,6 +61,9 @@ class LunarLanderAgent:
 		env = self.make_env()
 		action = env.action_space.sample()
 		env.close()
+		for i in range(3):
+			rand
+		action = (0)
 		return action
 		
 	def visualise_trajectory(self, seed=None) -> float:
