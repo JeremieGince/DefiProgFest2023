@@ -31,38 +31,40 @@ class LunarLanderAgent:
 		self.observation_as_rgb = self.env_config.get("render_mode", None) == "rgb_array"
 		# self.time0 = time.time()
 		self.observation_prev = np.zeros(8)
+		self.countobs = 0
 
 	def PID(self, observation, observation_prev, mode):
 		Kcy = 2
 		Tiy = 1
 		Tdy = 1
-		Kcx = -5
+		Kcx = -10
 		Tix = 1
-		Tdx = 1
+		Tdx = -7
 
-		Vyset = 0.6
+		Vyset = -0.3
 		deltat = 0.021
-		threshold_erreur = 0.005
+		threshold_erreur = 0.05
 
 		Pos_x = observation[0]
 		Pos_y = observation[1]
+		angle = observation[4]
 
 		Vx = observation[2]
 		Vy = observation[3]
-		angle = observation[4]
+		Vangle = observation[5]
 
 		Vxprev = observation_prev[2]
 		Vyprev = observation_prev[3]
-		angle_prev = observation_prev[4]
+		Vangle_prev = observation_prev[5]
 
 		if observation[-1] == "True" and observation[-2] == "True":
 			pass  # gagné
 
 		else:
-			Cvy_vitesse = (Kcy * (Vy - Vyset) + (Pos_y+1.42) / Tiy + Tdy * (Vy - Vyprev) / deltat)
-			Cvx = (Kcx * Vx + Pos_x / Tix + Tdx * (Vx - Vxprev) / deltat)
+			Cvy_vitesse = (Kcy * (Vy - Vyset) + (Pos_y + 0.9) / Tiy + Tdy * (Vy - Vyprev) / deltat)
+			Cvx = Kcx * Vx + (Pos_x-0.001) / Tix + Tdx * (Vx - Vxprev) / deltat
 
-			Cvy_angle = (Kcy * angle + angle / Tiy + Tdy * (angle - angle_prev) / deltat)
+			Cvy_angle = (Kcy * Vangle + angle / Tiy + Tdy * (Vangle - Vangle_prev) / deltat)
 
 			Cvy = (Cvy_vitesse + Cvy_angle) / 2
 
@@ -116,6 +118,9 @@ class LunarLanderAgent:
 		env = self.make_env()
 		action = env.action_space.sample()
 		if observation != []:
+			if self.countobs == 0:
+				self.countobs = 1
+				self.observation_prev = observation
 			print(observation)
 			action = self.PID(observation, self.observation_prev, mode="continuous")
 			self.observation_prev = observation
