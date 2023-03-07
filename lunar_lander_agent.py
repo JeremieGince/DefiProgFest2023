@@ -61,8 +61,8 @@ class LunarLanderAgent:
 		env = self.make_env()
 		action = env.action_space.sample()
 		env.close()
-		for i in range(3):
-			rand
+		
+			
 		action = (0)
 		return action
 		
