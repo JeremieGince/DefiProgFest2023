@@ -33,54 +33,47 @@ class LunarLanderAgent:
 		self.observation_prev = np.zeros(8)
 		self.countobs = 0
 
-	def PID(self, observation, observation_prev, mode):
-		Kcy = 2
-		Tiy = 1
-		Tdy = 1
-		Kcx = -10
-		Tix = 1
-		Tdx = -7
-
-		Vyset = -0.3
-		deltat = 0.021
-		threshold_erreur = 0.05
-
-		Pos_x = observation[0]
-		Pos_y = observation[1]
-		angle = observation[4]
-
-		Vx = observation[2]
-		Vy = observation[3]
-		Vangle = observation[5]
-
-		Vxprev = observation_prev[2]
-		Vyprev = observation_prev[3]
-		Vangle_prev = observation_prev[5]
-
-		if observation[-1] == "True" and observation[-2] == "True":
-			pass  # gagné
-
+	def PD(self, observation, mode):
+		#check si les pattes sont au sol
+		if (observation[6] or observation[7]) and mode == "continuous":
+			return ([0,0])
+		elif observation[6] or observation[7]:
+			return 0
 		else:
-			Cvy_vitesse = (Kcy * (Vy - Vyset) + (Pos_y + 0.9) / Tiy + Tdy * (Vy - Vyprev) / deltat)
-			Cvx = Kcx * Vx + (Pos_x-0.001) / Tix + Tdx * (Vx - Vxprev) / deltat
 
-			Cvy_angle = (Kcy * Vangle + angle / Tiy + Tdy * (Vangle - Vangle_prev) / deltat)
+			#gains
+			Kp_pos = 3 # gain proportionnel de position
+			Kd_pos = 3 # gain différentiel de position
+			Kp_ang = 10 # gain proportionnel d'angle
+			Kd_ang = 10 # gain différentiel d'angle
+			#observables pertinents
+			pos_horizontale = observation[0]
+			vit_horizontale = observation[2]
+			alt = observation[1]
+			ang = observation[4]
+			vit_ang = observation[5]
+			#cibles
+			pos_cible = pos_horizontale									#on veut que le lander vise pile au dessus de la zone
+			ang_cible = np.pi / 4 *(pos_horizontale + vit_horizontale) 	#on un angle pour propulser vers le centre pas plus grand que \pm 45 deg en fonction de la position et de la vitesse
+			#erreurs
+			pos_error = pos_cible - alt
+			ang_error = ang_cible - ang
 
-			Cvy = (Cvy_vitesse + Cvy_angle) / 2
+			#Commandes
+			c_pos = Kp_pos * pos_error + Kd_pos * vit_horizontale	#gains proportionnels fois erreurs + gains diff fois vitesses (valeur différentielle); pas d'intégrateur
+			c_ang = Kp_ang * ang_error + Kd_ang * vit_ang
 
-		if mode == "continuous":
-			Action_Space = [np.clip(Cvx, 0, 1), np.clip(Cvy, -1, 1)]
-		else:
-			if abs(Vy - Vyset) <= threshold_erreur and abs(Vx) <= threshold_erreur:
-				Action_Space = 0
-			elif abs(Vy - Vyset) > abs(Vx) and Vy - Vyset < 0:
-				Action_Space = 1
-			elif abs(Vy - Vyset) > abs(Vx) and Vy - Vyset > 0:
-				Action_Space = 3
+			if mode == "continuous":
+				action_space = np.clip([c_pos, c_ang], -1, 1) # définition de l'action à prendre en mode continuous
 			else:
-				Action_Space = 2
+				if max(np.abs(c_pos), np.abs(c_ang)) == np.abs(c_pos): # défintion de l'action à prendre en mode discret, on donne priorité à la commande la plus importante
+					action_space = 2
+				elif c_ang < 0:
+					action_space = 1
+				else:
+					action_space = 2
 
-		return Action_Space
+			return action_space
 	
 	def set_default_env_config(self):
 		self.env_config.setdefault('render_mode', None)
@@ -122,7 +115,7 @@ class LunarLanderAgent:
 				self.countobs = 1
 				self.observation_prev = observation
 			print(observation)
-			action = self.PID(observation, self.observation_prev, mode="continuous")
+			action = self.PD(observation, "continuous")
 			self.observation_prev = observation
 		env.close()
 		return action
@@ -165,4 +158,3 @@ if __name__ == '__main__':
 	agent.get_action([])
 	cr = agent.visualise_trajectory()
 	print(f"Cumulative reward: {cr:.2f}")
-
